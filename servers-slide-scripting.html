@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PHP in HTML</title>
+    </head>
+<body>
+    <h1>Hello, World!</h1>
+    <?php
+    // connect to the database-container
+    $servername = "localhost";
+    $username = "your_username";
+    $password = "your_password";
+    $dbname = "your_database_name";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    //check connection
+    if ($conn->connect_error) {
+        die("connection failed: " . $conn->connect_error);
+    }
+
+    // Get form data
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    //Prepare and execute
+    an SQL statement to insert data into database
+    $sql = "INSERT INTO users (name,email, password) VALUES (?,?,?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $name, $email, $password);
+    
+    $stmt->execute();
+
+    // Close the database connection
+    $stmt->close();
+    $conn->close();
+    
+    // Redirect to a success or error Page
+    if ($stmt->affected_rows > 0) {
+        header("Location: success.php");
+    } else {
+        header("Location: error.php");
+    }
+    ?>
+</body></html>
